@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Login Example</string>
+    <string name="signin_to_continue">Sign In to continue</string>
+    <string name="slogan_login">Hello there, Welcome back</string>
+    <string name="go">GO</string>
+    <string name="back_login">Already have an account? LogIn</string>
+    <string name="fullname">Fullname</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="password">Password</string>
+    <string name="welcome">Welcome</string>
+    <string name="sign_up_to_start">Sign Up to start your joynee</string>
+</resources>
