@@ -45,27 +45,47 @@ public class Signup extends AppCompatActivity {
                 pairs[6] = new Pair<View,String>(btnbackLogin,"signup_trans");
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Signup.this,pairs);
                 startActivity(intent,options.toBundle());
+                finish();
             }
         });
+        /*********************************************************
+         * Email: - Bắt đầu bằng chữ cái.
+                 - Chỉ chứa chữ cái, chữ số và dấu gạch ngang (-).
+                 - Chứa một ký tự @, sau @ là tên miền.
+                 - Tên miền có thể là domain.xxx.yyy hoặc domain.xxx. Trong đó xxx và yyy là các chữ cái và có độ dài từ 2 trở lên.
+
+          Pass:  - Phải chứa ít nhất 1 ký tự số từ 0 – 9
+                 - Phải chứa ít nhất 1 ký tự chữ thường
+                 - Phải chứa ít nhất 1 ký tự chữ hoa
+         **********************************************************/
 
         btnsignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(edtfullName.getEditText().getText().toString().trim().equals("")||edtuserName.getEditText().getText().toString().trim().equals("")||edtemail.getEditText().getText().toString().trim().equals("")||edtphone.getEditText().getText().toString().trim().equals("")||edtpassword.getEditText().getText().toString().trim().equals("")){
-                    Toast.makeText(Signup.this,"Mời bạn nhập đầy đủ thông tin",Toast.LENGTH_LONG).show();
+                if(edtfullName.getEditText().getText().toString().trim().equals("")||edtuserName.getEditText().getText().toString().trim().equals("")||edtemail.getEditText().getText().toString().trim().equals("")||edtphone.getEditText().getText().toString().trim().equals("")||edtpassword.getEditText().getText().toString().trim().equals("")) {
+                    Toast.makeText(Signup.this, "Mời bạn nhập đầy đủ thông tin", Toast.LENGTH_LONG).show();
+                }else if(edtphone.getEditText().getText().toString().matches("\\d{1,9}")) {
+                    Toast.makeText(Signup.this, "Số điện thoại không hợp lệ", Toast.LENGTH_LONG).show();
+                }else if(edtuserName.getEditText().getText().toString().matches("[a-z0-9_-]{0,5}$")) {
+                    Toast.makeText(Signup.this, "Usename không hợp lệ, Username phải có độ tài từ 6 đến 15 ký tự, không có khoảng trắng và không dấu", Toast.LENGTH_LONG).show();
+                }else if(edtemail.getEditText().getText().toString().matches("^(?!^[a-zA-Z][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$).*$")) {
+                    Toast.makeText(Signup.this, "Email không hợp lệ", Toast.LENGTH_LONG).show();
+                }else if(edtpassword.getEditText().getText().toString().matches("(?!((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})).*$")){
+                    Toast.makeText(Signup.this,"Password không hợp lệ, Password phải chứa ít nhất một kí tự viết hoa và một chữ số",Toast.LENGTH_LONG).show();
                 }else{
                     database = new Database(Signup.this,"LGAPP.sqlite",null,1);
                     database.QueryData("CREATE TABLE IF NOT EXISTS User(Username Char(16) PRIMARY KEY, Password Char(20),Fullname Char(30), Email Char(20), Phone Char(12))");
                     Log.d("AAA", "Tạo Data thành công");
+                    try{
+                        database.QueryData("INSERT INTO User VALUES('"+edtuserName.getEditText().getText().toString().trim()+"','"+edtpassword.getEditText().getText().toString().trim()+"','"+edtfullName.getEditText().getText().toString().trim()+"','"+edtemail.getEditText().getText().toString().trim()+"','"+edtphone.getEditText().getText().toString().trim()+"')");
+                        Toast.makeText(Signup.this, "Register Success !", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(Signup.this,Login.class));
+                    }catch (Exception ex){
+                        Toast.makeText(Signup.this, "Try again with another user name !", Toast.LENGTH_SHORT).show();
+                        Log.d("ERR",""+ex);
+                    }
                 }
-                try{
-                    database.QueryData("INSERT INTO User VALUES('"+edtuserName.getEditText().getText().toString().trim()+"','"+edtpassword.getEditText().getText().toString().trim()+"','"+edtfullName.getEditText().getText().toString().trim()+"','"+edtemail.getEditText().getText().toString().trim()+"','"+edtphone.getEditText().getText().toString().trim()+"')");
-                    Toast.makeText(Signup.this, "Register Success !", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(Signup.this,Login.class));
-                }catch (Exception ex){
-                    Toast.makeText(Signup.this, "Try again with another user name !", Toast.LENGTH_SHORT).show();
-                    Log.d("ERR",""+ex);
-                }
+
             }
         });
 

@@ -1,6 +1,9 @@
 package com.minhhieu.loginexample.view.activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -15,16 +18,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.minhhieu.loginexample.R;
 import com.minhhieu.loginexample.data.Database;
 
-public class Login extends AppCompatActivity {
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.concurrent.TimeUnit;
+
+public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     Button btncallSignUp,btnLogin;
-    ImageView image;
+    ImageView image,tvFacebook,tvGoogle,tvYahoo;
     TextView Logo, slogan;
     TextInputLayout edtuserName,edtPassword;
     Database database;
+    private GoogleApiClient googleApiClient;
+    private  static final int SIGN_IN_GG = 1;
+    private GoogleSignInClient mGoogleSignInClient;
+
 
 
     @Override
@@ -34,7 +59,55 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         initLayout();
         database=new Database(Login.this,"LGAPP.sqlite",null,1);
+        buttonLogin();
+        buttonSignup();
+        buttonLoginGG();
 
+
+
+    }
+
+
+    /*******************************
+     *  Setting Login Google  *
+     *******************************/
+
+    private void settingGoogle(){
+        //Yêu cầu người dùng cung cấp thông tin cơ bản + Email +
+        GoogleSignInOptions gso =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        //Kết nối googleAPI
+        googleApiClient=new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+    }
+
+
+
+    /*******************************
+     *  Xử lí button Login Google  *
+     *******************************/
+    private void buttonLoginGG(){
+        tvGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingGoogle();
+                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                startActivityForResult(intent,SIGN_IN_GG);
+                Log.d("Success",googleApiClient.isConnected()+"");
+            }
+        });
+    }
+
+    /************************
+     *  Xử lí button Login *
+     ************************/
+    private void buttonLogin(){
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,13 +124,18 @@ public class Login extends AppCompatActivity {
                         startActivity(intent);
                         database.close();
                     } else
-                        Toast.makeText(Login.this, "Đăng nhập sai, vui lòng kiểm tra lại tài khoản !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Đăng nhập sai, vui lòng kiểm tra lại tài khoản!", Toast.LENGTH_LONG).show();
                 }
 
             }
         });
 
-        //Sự kiện button Signup
+    }
+
+    /*************************
+     *  Xử lí button Signup  *
+     ************************/
+    private void buttonSignup(){
         btncallSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +154,9 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    //bắt sự kiện
+    /******************
+     * Xử lí sự kiện  *
+     ******************/
     public void initLayout(){
         btncallSignUp = (Button) findViewById(R.id.signup);
         btnLogin = (Button) findViewById(R.id.login);
@@ -85,5 +165,40 @@ public class Login extends AppCompatActivity {
         slogan = (TextView) findViewById(R.id.slogan_login);
         edtuserName = (TextInputLayout) findViewById(R.id.username);
         edtPassword = (TextInputLayout) findViewById(R.id.password);
+        tvGoogle = (ImageView) findViewById(R.id.tv_google);
+        tvFacebook = (ImageView) findViewById(R.id.tv_fb);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==SIGN_IN_GG){
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+
+        }
+    }
+
+
+    private void handleSignInResult(GoogleSignInResult result){
+        if(result.isSuccess()){
+            gotoProfile();
+        }else{
+            Toast.makeText(getApplicationContext(),"Sign in cancel",Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
+    private void gotoProfile(){
+        Intent intent = new Intent(Login.this,MainActivity2.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("Failed",connectionResult+"");
+    }
+
 }
