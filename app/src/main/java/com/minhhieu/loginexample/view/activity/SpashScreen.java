@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import com.minhhieu.loginexample.R;
 
-public class MainActivity extends AppCompatActivity {
+public class SpashScreen extends AppCompatActivity {
 
-    private static int SPLASH_SCREEN = 5000;
+    private static int SPLASH_SCREEN_TIME = 5000;
 
 
     Animation topAnimation, bottomAnimation;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.splash_screen);
 
         //Animation
         topAnimation = AnimationUtils.loadAnimation(this,R.anim.top_animation);
@@ -48,16 +48,17 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(MainActivity.this,Login.class);
+                Intent intent = new Intent(SpashScreen.this,LoginActivity.class);
                 Pair[] pairs = new Pair[2];
+
                 //anim chuyển activity
                 pairs[0] = new Pair<View,String>(image,"logo_image");
                 pairs[1] = new Pair<View,String>(logo,"logo_text");
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,pairs);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SpashScreen.this,pairs);
                 startActivity(intent,options.toBundle());
                 finish();
             }
-        },SPLASH_SCREEN);
+        },SPLASH_SCREEN_TIME);
 
     }
 }

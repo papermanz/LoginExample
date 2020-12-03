@@ -10,19 +10,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.minhhieu.loginexample.R;
 
 
 
-public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class LogoutActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     Button btnLogout;
     private GoogleApiClient googleApiClient;
     private GoogleSignInOptions gso;
@@ -30,7 +27,7 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_logout);
         initLayout();
         settingGoogle();
         buttonLogOut();
@@ -74,7 +71,7 @@ public class MainActivity2 extends AppCompatActivity implements GoogleApiClient.
         });
     }
     private void gotoLoginActivity(){
-       Intent intent=new Intent(this,Login.class);
+       Intent intent=new Intent(this,LoginActivity.class);
        startActivity(intent);
        finish();
     }

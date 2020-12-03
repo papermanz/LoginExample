@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activity.Login"
+    tools:context=".view.activity.LoginActivity"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="@color/color_green">
+    >
     
     <ImageView
         android:id="@+id/logo_login"
@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="GO"
-            android:background="@color/color_orange"
+            android:background="@color/color_tim"
             android:textColor="@color/color_yellow"
             android:transitionName="login_trans"/>
 
@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            android:textColor="@color/color_camdam"
+            android:textColor="#000"
             android:text="NEW USER? SIGNUP"
             android:elevation="0dp"
             android:layout_marginTop="5dp"
