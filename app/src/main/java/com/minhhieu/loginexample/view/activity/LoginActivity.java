@@ -14,6 +14,7 @@ import android.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +49,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         initLayout();
-//        GetUserTask getUser = new GetUserTask();
-//        getUser.execute();
         database = new Database(LoginActivity.this);
         initListeners();
     }
@@ -109,29 +108,34 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      *  Xử lí button Login *
      ***********************/
     private void setBtnLogin() {
-        String userName = edtuserName.getEditText().getText().toString().trim();
-        String password = edtPassword.getEditText().getText().toString().trim();
-        GetUserTask task = new GetUserTask(this, userName, password);
+        User user = new User();
+        final String userName = getStringInput(edtuserName);
+        final String passWord = getStringInput(edtPassword);
+        GetUserTask task = new GetUserTask(this, userName, passWord);
         task.setGetUserListener(new GetUserTask.GetUserListener() {
             @Override
             public void onSuccess(User user) {
-                if (user != null){
-                     Intent intent = new Intent(LoginActivity.this, LogoutActivity.class);
-                     Log.d("LOGIN", "SUCCESS ");
-                     startActivity(intent);
+                if (user.getUserName() != null){
+                        Intent intent = new Intent(LoginActivity.this, LogoutActivity.class);
+                        Log.d("LOGIN", "SUCCESS ");
+                        startActivity(intent);
                 }else{
-                    Toast.makeText(LoginActivity.this, "Đăng nhập sai, vui lòng kiểm tra lại tài khoản!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Tài khoản không tồn tại!", Toast.LENGTH_LONG).show();
                 }
             }
         });
         task.execute();
-//        if (database.checkUser(UserName, Password)) {
-//            Intent intent = new Intent(LoginActivity.this, LogoutActivity.class);
-//            Log.d("LOGIN", "SUCCESS ");
-//            startActivity(intent);
-//        } else {
-//            Toast.makeText(LoginActivity.this, "Đăng nhập sai, vui lòng kiểm tra lại tài khoản!", Toast.LENGTH_LONG).show();
-//        }
+    }
+
+
+    //Toi uu code tranh duplicate
+    private String getStringInput(TextInputLayout textInputLayout){
+        EditText txt = textInputLayout.getEditText();
+        if(txt == null){
+            return "";
+        }else {
+            return txt.getText().toString().trim();
+        }
     }
 
     /*****************

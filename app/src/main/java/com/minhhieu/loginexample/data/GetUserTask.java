@@ -7,34 +7,47 @@ import android.os.AsyncTask;
 
 import com.minhhieu.loginexample.model.User;
 
+
 public class GetUserTask extends AsyncTask<Context, Void, User> {
     private SQLiteDatabase db;
-    private Database database;
     private GetUserListener mListener;
+    String User, Pass;
+    private final static String TABLE_NAME = "User";
+    private final static String KEY_USER = "Username";
+    private final static String KEY_PASS = "Password";
 
-
-
+//    private Cursor cursor;
 
     public GetUserTask(Context context, String userName, String pass) {
         db = new Database(context).getReadableDatabase();
+        this.User = userName;
+        this.Pass = pass;
     }
 
     @Override
     protected User doInBackground(Context... contexts) {
+
         //run query
         User user = new User();
         //cursor get user from db
+        String query = "Select Username, Password FROM " + TABLE_NAME
+                + " WHERE " + KEY_USER + " = "
+                + "'" + User + "' AND " + KEY_PASS + " = "
+                + "'" + Pass + "'" ;
 
-//            Cursor cursor = database.QueryData("SELECT Username, Password FROM User");
-//        if (cursor != null && cursor.moveToFirst()) {
-//            do {
-//                user.setUserName(cursor.getString(0));
-//                user.setPassWord(cursor.getString(1));
-//
-//            } while (cursor.moveToNext());
-//
-//        }
-//        database.close();
+            Cursor cursor = db.rawQuery(query,null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                user.setUserName(cursor.getString(0));
+                user.setPassWord(cursor.getString(1));
+            }
+        }else{
+
+            cursor.close();
+
+        }
+        db.close();
+
 
         //parse cursor to user
 

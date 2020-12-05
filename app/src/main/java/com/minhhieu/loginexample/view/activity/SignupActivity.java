@@ -6,12 +6,14 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.util.Pair;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,13 +53,23 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-
+// toi uu tranh duplicate
     private void inputUser(){
-        user.setUserName(edtuserName.getEditText().getText().toString().trim());
-        user.setPassWord(edtpassword.getEditText().getText().toString().trim());
-        user.setFullName(edtfullName.getEditText().getText().toString().trim());
-        user.setEmail(edtemail.getEditText().getText().toString().trim());
-        user.setPhone(edtphone.getEditText().getText().toString().trim());
+        user.setUserName(getStringInput(edtuserName));
+        user.setPassWord(getStringInput(edtpassword));
+        user.setFullName(getStringInput(edtfullName));
+        user.setEmail(getStringInput(edtemail));
+        user.setPhone(getStringInput(edtphone));
+    }
+
+    //Toi uu code tranh duplicate
+    private String getStringInput(TextInputLayout textInputLayout){
+           EditText txt = textInputLayout.getEditText();
+           if(txt == null){
+               return "";
+           }else {
+               return txt.getText().toString().trim();
+           }
     }
 
     /**************************
@@ -66,7 +78,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     private void setBtnsignUp(){
         if(validate()) {
-            String UserName = edtuserName.getEditText().getText().toString().trim();
+            String UserName = getStringInput(edtuserName);
+
             if(!database.checkUser(UserName)){
                 user = new User();
                 inputUser();
@@ -107,11 +120,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     public boolean validate() {
         boolean valid = true;
-        String FullName = edtfullName.getEditText().getText().toString().trim();
-        String UserName = edtuserName.getEditText().getText().toString().trim();
-        String Phone = edtphone.getEditText().getText().toString().trim();
-        String Email = edtemail.getEditText().getText().toString().trim();
-        String Password = edtpassword.getEditText().getText().toString().trim();
+        String FullName = getStringInput(edtfullName);
+        String UserName = getStringInput(edtuserName);
+        String Phone = getStringInput(edtphone);
+        String Email = getStringInput(edtemail);
+        String Password = getStringInput(edtpassword);
 
         if (FullName.isEmpty()) {
             valid = false;

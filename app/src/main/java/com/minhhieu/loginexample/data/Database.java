@@ -32,16 +32,8 @@ public class Database extends SQLiteOpenHelper {
             + KEY_USER + " TEXT PRIMARY KEY," + KEY_PASS + " TEXT,"
             + KEY_NAME + " TEXT," + KEY_EMAIL + " TEXT," + KEY_PHONE + " TEXT"+ ")";
 
-    public Cursor QueryData(String sql){
-        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        sqLiteDatabase.execSQL(sql);
-        return null;
-    }
 
-    public Cursor GetData(String sql){
-        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-        return sqLiteDatabase.rawQuery(sql,null);
-    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER_TABLE);
