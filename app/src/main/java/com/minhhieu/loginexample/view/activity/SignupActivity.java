@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
-import android.util.Log;
 import android.util.Pair;
 import android.util.Patterns;
 import android.view.View;
@@ -19,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 import com.minhhieu.loginexample.R;
+import com.minhhieu.loginexample.utils.asynctask.CheckUserTask;
 import com.minhhieu.loginexample.data.Database;
+import com.minhhieu.loginexample.utils.asynctask.SetUserTask;
 import com.minhhieu.loginexample.model.User;
 
 /*********************************************************
@@ -76,23 +75,51 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
      * Bắt sự kiện nút Signup *
      **************************/
 
-    private void setBtnsignUp(){
-        if(validate()) {
-            String UserName = getStringInput(edtuserName);
+    private void setBtnsignUp() {
+        if (validate()) {
+            final String UserName = getStringInput(edtuserName);
 
-            if(!database.checkUser(UserName)){
-                user = new User();
-                inputUser();
-                database.addUser(user);
-                Toast.makeText(SignupActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-            }else {
-                Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại, vui lòng nhập tài khoản khác", Toast.LENGTH_SHORT).show();
-                Log.d("ERR", "lỗi");
-            }
+
+
+//            if(!database.checkUser(UserName)){
+//                user = new User();
+//                inputUser();
+//                database.addUser(user);
+//                Toast.makeText(SignupActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
+//                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+//            }else {
+//                Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại, vui lòng nhập tài khoản khác", Toast.LENGTH_SHORT).show();
+//                Log.d("ERR", "lỗi");
+//            }
+            user = new User();
+            inputUser();
+            CheckUserTask task = new CheckUserTask(this, UserName);
+            task.setGetUserListener(new CheckUserTask.GetUserListener() {
+                @Override
+                public void onSuccess(User user) {
+                    if(user.getUserName()!=null){
+                        Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại!", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        AddUser();
+                    }
+                }
+            });
+            task.execute();
         }
     }
 
+    private void AddUser(){
+        final String UserName = getStringInput(edtuserName);
+        final String PassWord = getStringInput(edtpassword);
+        final String FullName = getStringInput(edtfullName);
+        final String Email = getStringInput(edtemail);
+        final String Phone = getStringInput(edtphone);
+        inputUser();
+        SetUserTask setUserTask = new SetUserTask(this);
+        setUserTask.execute("add_user",UserName,PassWord,FullName,Email,Phone);
+        finish();
+    }
     /************************
      * Bắt sự kiện nút Login*
      ************************/
@@ -194,16 +221,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
      ******************/
 
     public void initLayout(){
-        btnsignUp = (Button) findViewById(R.id.go_signup);
-        btnbackLogin = (Button) findViewById(R.id.back_login);
-        edtfullName = (TextInputLayout) findViewById(R.id.name);
-        edtuserName = (TextInputLayout) findViewById(R.id.username);
-        edtemail = (TextInputLayout) findViewById(R.id.email);
-        edtphone = (TextInputLayout) findViewById(R.id.phone);
-        edtpassword = (TextInputLayout) findViewById(R.id.password);
-        logoLogin = (ImageView) findViewById(R.id.logo_login);
-        tvSignup = (TextView) findViewById(R.id.tv_signup);
-        tvSloganLogin = (TextView) findViewById(R.id.tv_slogan_login);
+        btnsignUp = findViewById(R.id.go_signup);
+        btnbackLogin =  findViewById(R.id.back_login);
+        edtfullName = findViewById(R.id.name);
+        edtuserName = findViewById(R.id.username);
+        edtemail = findViewById(R.id.email);
+        edtphone = findViewById(R.id.phone);
+        edtpassword = findViewById(R.id.password);
+        logoLogin = findViewById(R.id.logo_login);
+        tvSignup = findViewById(R.id.tv_signup);
+        tvSloganLogin = findViewById(R.id.tv_slogan_login);
     }
 
     @Override

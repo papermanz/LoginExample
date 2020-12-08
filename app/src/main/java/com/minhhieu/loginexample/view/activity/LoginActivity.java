@@ -5,9 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityOptions;
-import android.content.Context;
+
 import android.content.Intent;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -29,12 +29,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.textfield.TextInputLayout;
 import com.minhhieu.loginexample.R;
 import com.minhhieu.loginexample.data.Database;
-import com.minhhieu.loginexample.data.GetUserTask;
+import com.minhhieu.loginexample.utils.asynctask.GetUserTask;
 import com.minhhieu.loginexample.model.User;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
     Button btncallSignUp, btnLogin;
-    ImageView image, tvFacebook, tvGoogle, tvYahoo;
+    ImageView image, tvFacebook, tvGoogle;
     TextView Logo, slogan;
     TextInputLayout edtuserName, edtPassword;
     Database database;
@@ -142,15 +142,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      * Xử lí sự kiện *
      *****************/
     public void initLayout() {
-        btncallSignUp = (Button) findViewById(R.id.signup);
-        btnLogin = (Button) findViewById(R.id.login);
-        image = (ImageView) findViewById(R.id.logo_login);
-        Logo = (TextView) findViewById(R.id.logo_text);
-        slogan = (TextView) findViewById(R.id.slogan_login);
-        edtuserName = (TextInputLayout) findViewById(R.id.username);
-        edtPassword = (TextInputLayout) findViewById(R.id.password);
-        tvGoogle = (ImageView) findViewById(R.id.tv_google);
-        tvFacebook = (ImageView) findViewById(R.id.tv_fb);
+        btncallSignUp = findViewById(R.id.signup);
+        btnLogin = findViewById(R.id.login);
+        image = findViewById(R.id.logo_login);
+        Logo = findViewById(R.id.logo_text);
+        slogan = findViewById(R.id.slogan_login);
+        edtuserName = findViewById(R.id.username);
+        edtPassword = findViewById(R.id.password);
+        tvGoogle = findViewById(R.id.tv_google);
+        tvFacebook = findViewById(R.id.tv_fb);
     }
 
     @Override

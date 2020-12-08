@@ -1,57 +1,44 @@
-package com.minhhieu.loginexample.data;
+package com.minhhieu.loginexample.utils.asynctask;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import com.minhhieu.loginexample.data.Database;
 import com.minhhieu.loginexample.model.User;
 
-
-public class GetUserTask extends AsyncTask<Context, Void, User> {
+public class CheckUserTask extends AsyncTask<Context, String, User> {
     private SQLiteDatabase db;
     private GetUserListener mListener;
-    String User, Pass;
+    String User;
     private final static String TABLE_NAME = "User";
     private final static String KEY_USER = "Username";
-    private final static String KEY_PASS = "Password";
 
-//    private Cursor cursor;
 
-    public GetUserTask(Context context, String userName, String pass) {
+    public CheckUserTask(Context context, String userName) {
         db = new Database(context).getReadableDatabase();
         this.User = userName;
-        this.Pass = pass;
-    }
 
+    }
     @Override
     protected User doInBackground(Context... contexts) {
+       User user = new User();
 
-        //run query
-        User user = new User();
-        //cursor get user from db
-        String query = "Select Username, Password FROM " + TABLE_NAME
+        String query = "Select Username FROM " + TABLE_NAME
                 + " WHERE " + KEY_USER + " = "
-                + "'" + User + "' AND " + KEY_PASS + " = "
-                + "'" + Pass + "'" ;
-
-            Cursor cursor = db.rawQuery(query,null);
+                + "'" + User + "'";
+        Cursor cursor = db.rawQuery(query,null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 user.setUserName(cursor.getString(0));
-                user.setPassWord(cursor.getString(1));
             }
         }else{
-
             cursor.close();
 
         }
         db.close();
 
-
-        //parse cursor to user
-
-        //close db
         return user;
     }
 
@@ -62,7 +49,6 @@ public class GetUserTask extends AsyncTask<Context, Void, User> {
             mListener.onSuccess(data);
         }
     }
-
     public void setGetUserListener(GetUserListener listener){
         mListener = listener;
     }
