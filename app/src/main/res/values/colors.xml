@@ -10,8 +10,20 @@
     <color name="color_green">#9ad3bc</color>
     <color name="color_red">#b83b5e</color>
     <color name="color_brown">#ac4b1c</color>
-    <color name="color_tim">#706897</color>
+    <color name="color_black_gray">#3f3f44</color>
     <color name="color_camdam">#dd9866</color>
     <color name="color_hong">#ebcfc4</color>
+    <color name="color_white">#ffffff</color>
+    <color name="color_Black">#222831</color>
+    <color name="color_Grey">#bbbbbb</color>
+    <color name="no_color">#00000000</color>
+    <color name="color_red_dam">#c65f63</color>
+    <color name="color_milk">#f5f4f4</color>
+    <color name="ligh_meduim_gray" >#f3f3f3</color>
+    <color name="fav_icon_tint">#CAC7C7</color>
+
+
+
+
 
 </resources>

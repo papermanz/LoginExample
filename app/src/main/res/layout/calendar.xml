@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/viewCalen"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#3f000000" />
+    <RelativeLayout
+        android:id="@+id/rlCalen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_calen">
+
+        <CalendarView
+            android:id="@+id/calen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/calen"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+            <Button
+                android:id="@+id/btnCalenCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calen"
+                android:background="@drawable/bg_calen"
+                android:text="@string/huy" />
+
+            <Button
+                android:id="@+id/btnCalenOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/calen"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/bg_calen"
+                android:text="@string/chon" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

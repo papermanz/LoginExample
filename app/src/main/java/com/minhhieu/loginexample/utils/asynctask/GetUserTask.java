@@ -1,11 +1,13 @@
 package com.minhhieu.loginexample.utils.asynctask;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-import com.minhhieu.loginexample.data.Database;
+import com.minhhieu.loginexample.R;
+import com.minhhieu.loginexample.data.DatabaseLogin;
 import com.minhhieu.loginexample.model.User;
 
 
@@ -17,13 +19,16 @@ public class GetUserTask extends AsyncTask<Context, Void, User> {
     private final static String KEY_USER = "Username";
     private final static String KEY_PASS = "Password";
 
-//    private Cursor cursor;
+
 
     public GetUserTask(Context context, String userName, String pass) {
-        db = new Database(context).getReadableDatabase();
+        db = new DatabaseLogin(context).getReadableDatabase();
         this.User = userName;
         this.Pass = pass;
+
     }
+
+
 
     @Override
     protected User doInBackground(Context... contexts) {
@@ -49,12 +54,12 @@ public class GetUserTask extends AsyncTask<Context, Void, User> {
         }
         db.close();
 
-
         //parse cursor to user
 
         //close db
         return user;
     }
+
 
     @Override
     protected void onPostExecute(User data) {

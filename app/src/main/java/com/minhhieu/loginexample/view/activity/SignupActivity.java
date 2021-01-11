@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 import com.minhhieu.loginexample.R;
 import com.minhhieu.loginexample.utils.asynctask.CheckUserTask;
-import com.minhhieu.loginexample.data.Database;
+import com.minhhieu.loginexample.data.DatabaseLogin;
 import com.minhhieu.loginexample.utils.asynctask.SetUserTask;
 import com.minhhieu.loginexample.model.User;
 
@@ -37,7 +37,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     TextView tvSignup,tvSloganLogin;
     Button btnsignUp, btnbackLogin;
     TextInputLayout edtfullName, edtuserName, edtemail, edtphone, edtpassword;
-    Database database;
+    DatabaseLogin databaseLogin;
     private User user;
 
 
@@ -47,12 +47,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
         initLayout();
-        database = new Database(SignupActivity.this);
+        databaseLogin = new DatabaseLogin(SignupActivity.this);
         initListeners();
+        setTitle(null);
 
     }
 
-// toi uu tranh duplicate
     private void inputUser(){
         user.setUserName(getStringInput(edtuserName));
         user.setPassWord(getStringInput(edtpassword));
@@ -61,7 +61,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         user.setPhone(getStringInput(edtphone));
     }
 
-    //Toi uu code tranh duplicate
+    //ham Toi uu code tranh duplicate
     private String getStringInput(TextInputLayout textInputLayout){
            EditText txt = textInputLayout.getEditText();
            if(txt == null){
@@ -78,19 +78,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private void setBtnsignUp() {
         if (validate()) {
             final String UserName = getStringInput(edtuserName);
-
-
-
-//            if(!database.checkUser(UserName)){
-//                user = new User();
-//                inputUser();
-//                database.addUser(user);
-//                Toast.makeText(SignupActivity.this, "Đăng nhập thành công !", Toast.LENGTH_SHORT).show();
-//                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-//            }else {
-//                Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại, vui lòng nhập tài khoản khác", Toast.LENGTH_SHORT).show();
-//                Log.d("ERR", "lỗi");
-//            }
             user = new User();
             inputUser();
             CheckUserTask task = new CheckUserTask(this, UserName);
@@ -101,7 +88,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại!", Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        AddUser();
+                        addUser();
                     }
                 }
             });
@@ -109,15 +96,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void AddUser(){
-        final String UserName = getStringInput(edtuserName);
-        final String PassWord = getStringInput(edtpassword);
-        final String FullName = getStringInput(edtfullName);
-        final String Email = getStringInput(edtemail);
-        final String Phone = getStringInput(edtphone);
+    private void addUser(){
+
         inputUser();
-        SetUserTask setUserTask = new SetUserTask(this);
-        setUserTask.execute("add_user",UserName,PassWord,FullName,Email,Phone);
+        SetUserTask setUserTask = new SetUserTask(this,user);
+        setUserTask.execute();
         finish();
     }
     /************************
@@ -140,12 +123,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
     }
 
-
     /***********************
      * Check lỗi các trường*
      ***********************/
 
-    public boolean validate() {
+    private boolean validate() {
         boolean valid = true;
         String FullName = getStringInput(edtfullName);
         String UserName = getStringInput(edtuserName);
@@ -173,7 +155,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         if (Email.isEmpty()) {
             valid = false;
-            edtemail.setError("Vui lòng nhập email!");
+            edtemail.setError("Bạn vui lòng nhập email!");
         } else {
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
                 valid = false;
@@ -185,7 +167,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         if (Password.isEmpty()) {
             valid = false;
-            edtpassword.setError("Vui lòng nhập password!");
+            edtpassword.setError("Bạn vui lòng nhập password!");
         } else {
             if (Password.matches("(?!((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})).*$")){
                 valid = false;

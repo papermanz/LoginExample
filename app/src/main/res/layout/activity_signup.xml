@@ -22,7 +22,9 @@
         android:fontFamily="@font/fredoka_one"
         android:text="@string/welcome"
         android:textSize="40sp"
-        android:transitionName="logo_text" />
+        android:transitionName="logo_text"
+        />
+
     <TextView
         android:id="@+id/tv_slogan_login"
         android:layout_width="wrap_content"
@@ -137,7 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/go"
-            android:background="@color/color_tim"
+            android:background="@color/color_black_gray"
             android:textColor="@color/color_yellow"
             android:transitionName="login_trans"/>
         <Button
@@ -146,9 +148,10 @@
             android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:text="@string/back_login"
-            android:textColor="#000"
-            android:background="#00000000"
-            android:transitionName="signup_trans"/>
+            android:textColor="@color/color_Black"
+            android:transitionName="signup_trans"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            />
 
 
 </LinearLayout>

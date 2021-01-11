@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.activity.DetailBookActivity">
+
+    <ImageView
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:background="@drawable/container_bg"
+        android:transitionName="containerTN"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:transitionName="bookTN"
+        android:id="@+id/imgv_book"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/book1" />
+
+    <TextView
+        android:transitionName="booktitleTN"
+        android:id="@+id/txtTenSach"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="An American Marriage"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imgv_book"
+        app:layout_constraintTop_toTopOf="@+id/imgv_book" />
+
+    <TextView
+        android:transitionName="authorTN"
+        android:id="@+id/txtTacGia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="By Tayari Jones"
+        app:layout_constraintStart_toEndOf="@+id/imgv_book"
+        app:layout_constraintTop_toBottomOf="@+id/txtTenSach" />
+
+    <TextView
+        android:transitionName="Theloai"
+        android:id="@+id/txtTheloai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="thieu nhi"
+        android:textColor="@color/color_red"
+        app:layout_constraintStart_toEndOf="@+id/imgv_book"
+        app:layout_constraintTop_toBottomOf="@+id/txtTacGia" />
+
+
+    <RatingBar
+        android:transitionName="rateTN"
+        android:id="@+id/item_book_ratingbar"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:rating="5"
+        android:progressTint="@android:color/holo_orange_light"
+        app:layout_constraintStart_toEndOf="@+id/imgv_book"
+        app:layout_constraintTop_toBottomOf="@+id/container" />
+
+    <TextView
+        android:transitionName="scoreTN"
+        android:id="@+id/item_book_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="score"
+        app:layout_constraintBottom_toBottomOf="@+id/item_book_ratingbar"
+        app:layout_constraintStart_toEndOf="@+id/item_book_ratingbar"
+        app:layout_constraintTop_toTopOf="@+id/item_book_ratingbar" />
+
+    <TextView
+        android:transitionName="bookpagesTN"
+        android:id="@+id/txt_soTrang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="225"
+        app:layout_constraintStart_toEndOf="@+id/imgv_book"
+        app:layout_constraintTop_toBottomOf="@+id/txtTheloai" />
+
+    <TextView
+        android:transitionName="bookpagesTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:text="trang"
+        app:layout_constraintStart_toEndOf="@+id/txt_soTrang"
+        app:layout_constraintTop_toBottomOf="@+id/txtTheloai" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/container"
+        app:layout_constraintTop_toTopOf="@+id/container"
+        app:srcCompat="@drawable/ic_favorite_black_24dp"
+        app:tint="@color/fav_icon_tint"/>
+
+    <TextView
+        android:id="@+id/txt_noidung"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:lineSpacingExtra="8sp"
+        android:text="@string/noi_dung"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgv_book" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

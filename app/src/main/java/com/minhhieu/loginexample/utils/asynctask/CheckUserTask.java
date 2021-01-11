@@ -5,20 +5,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-import com.minhhieu.loginexample.data.Database;
+import com.minhhieu.loginexample.data.DatabaseLogin;
 import com.minhhieu.loginexample.model.User;
 
 public class CheckUserTask extends AsyncTask<Context, String, User> {
     private SQLiteDatabase db;
     private GetUserListener mListener;
-    String User;
+    String userName;
     private final static String TABLE_NAME = "User";
     private final static String KEY_USER = "Username";
 
 
     public CheckUserTask(Context context, String userName) {
-        db = new Database(context).getReadableDatabase();
-        this.User = userName;
+        db = new DatabaseLogin(context).getReadableDatabase();
+        this.userName = userName;
 
     }
     @Override
@@ -27,7 +27,7 @@ public class CheckUserTask extends AsyncTask<Context, String, User> {
 
         String query = "Select Username FROM " + TABLE_NAME
                 + " WHERE " + KEY_USER + " = "
-                + "'" + User + "'";
+                + "'" + userName + "'";
         Cursor cursor = db.rawQuery(query,null);
         if (cursor != null) {
             while (cursor.moveToNext()) {

@@ -7,6 +7,7 @@
     tools:context=".view.activity.LoginActivity"
     android:orientation="vertical"
     android:padding="20dp"
+
     >
     
     <ImageView
@@ -43,7 +44,7 @@
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
+            android:hint="@string/username"
             android:transitionName="username_trans"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -76,32 +77,35 @@
         <Button
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:text="Forget Password?"
+            android:textColor="@color/color_Black"
+            android:text="@string/forget_password"
             android:layout_gravity="right"
             android:elevation="0dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            />
         <Button
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="GO"
-            android:background="@color/color_tim"
-            android:textColor="@color/color_yellow"
+            android:text="@string/go"
+            android:background="@color/color_Black"
+            android:textColor="@color/color_white"
             android:transitionName="login_trans"/>
 
         <Button
             android:id="@+id/signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:textColor="#000"
-            android:text="NEW USER? SIGNUP"
+            android:textColor="@color/color_Black"
+            android:text="@string/new_user_signup"
             android:elevation="0dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:transitionName="signup_trans"/>
+            android:transitionName="signup_trans"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            />
 
     </LinearLayout>
 
@@ -116,19 +120,19 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/facebook"
-            android:layout_marginLeft="60dp"/>
+            android:layout_marginStart="60dp"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/tv_google"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
             android:src="@drawable/google"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
             android:src="@drawable/yahoo"/>
     </LinearLayout>
 

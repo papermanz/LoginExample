@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityOptions;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -26,9 +28,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.minhhieu.loginexample.R;
-import com.minhhieu.loginexample.data.Database;
+import com.minhhieu.loginexample.data.DatabaseLogin;
 import com.minhhieu.loginexample.utils.asynctask.GetUserTask;
 import com.minhhieu.loginexample.model.User;
 
@@ -37,10 +40,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     ImageView image, tvFacebook, tvGoogle;
     TextView Logo, slogan;
     TextInputLayout edtuserName, edtPassword;
-    Database database;
+    DatabaseLogin databaseLogin;
     private GoogleApiClient googleApiClient;
     private static final int SIGN_IN_GG = 1;
     private GoogleSignInClient mGoogleSignInClient;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -48,9 +52,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
+        setTitle(null);
         initLayout();
-        database = new Database(LoginActivity.this);
+        databaseLogin = new DatabaseLogin(LoginActivity.this);
+        setProgressDialog();
         initListeners();
+    }
+
+    private void setProgressDialog(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.dang_xu_ly));
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
     }
 
 
@@ -116,9 +129,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onSuccess(User user) {
                 if (user.getUserName() != null){
-                        Intent intent = new Intent(LoginActivity.this, LogoutActivity.class);
-                        Log.d("LOGIN", "SUCCESS ");
-                        startActivity(intent);
+                        progressDialog.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(() -> {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Log.d("LOGIN", "SUCCESS ");
+                            startActivity(intent);
+                            progressDialog.dismiss();
+                        },1500);
+
+
                 }else{
                     Toast.makeText(LoginActivity.this, "Tài khoản không tồn tại!", Toast.LENGTH_LONG).show();
                 }
@@ -174,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
     private void gotoProfile() {
-        Intent intent = new Intent(LoginActivity.this, LogoutActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
@@ -208,5 +228,22 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         btncallSignUp.setOnClickListener(this);
         tvGoogle.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("")
+                .setMessage("Bạn có muốn thoát không?")
+                .setPositiveButton("Có", (dialogInterface, i) -> {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Không", (dialogInterface, i) -> {
+
+                })
+                .show();
     }
 }

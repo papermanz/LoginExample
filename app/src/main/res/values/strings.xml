@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">Login Example</string>
+    <string name="app_name">Tea Book</string>
     <string name="signin_to_continue">Sign In to continue</string>
     <string name="slogan_login">Hello there, Welcome back</string>
-    <string name="go">GO</string>
     <string name="back_login">Already have an account? LogIn</string>
     <string name="fullname">Fullname</string>
     <string name="username">Username</string>
@@ -12,6 +11,43 @@
     <string name="welcome">Welcome</string>
     <string name="sign_up_to_start">Sign Up to start your joynee</string>
     <string name="sign_out">Sign Out</string>
+    <string name="add_book">Add Book</string>
+    <string name="list_book">List Book</string>
+    <string name="book_name">Tên Sách: </string>
+    <string name="tac_gia">Tác Giả: </string>
+    <string name="nha_xuat_ban">Nhà Xuất Bản: </string>
+    <string name="the_loai">Thể loại: </string>
+    <string name="vi_tri">Vị Trí: </string>
+    <string name="ngay_xuat_ban">Ngày Xuất Bản: </string>
+    <string name="so_trang">Số Trang: </string>
+    <string name="gia_sach">Giá Sách: </string>
+    <string name="trang">Trang</string>
+    <string name="vnd">VNĐ</string>
+    <string name="tom_tat">Tóm lược nội dung: </string>
+    <string name="noi_dung">Nội dung:...</string>
+    <string name="huy">Huỷ</string>
+    <string name="chon">Chọn</string>
+    <string name="sai_dinh_dang_ngay">Nhập vào một ngày với định dạng DD/MM/YYYY!</string>
+    <string name="empty_ten_sach">Tên sách không được bỏ trống!</string>
+    <string name="empty_tac_gia">Tác Giả không được bỏ trống!</string>
+    <string name="empty_nha_san_xuat">Nhà sản xuất không được bỏ trống!</string>
+    <string name="empty_so_trang">Số trang không được bỏ trống!</string>
+    <string name="empty_gia_sach">Giá sách không được bỏ trống!</string>
+    <string name="empty_noi_dung">Nội dung không được bỏ trống!</string>
+    <string name="tea_book">Tea Book</string>
+    <string name="slogan">Đọc sách mọi lúc, mọi nơi</string>
+    <string name="btn_add_sach">Thêm</string>
+    <string name="btn_date">09/03/1998</string>
+    <string name="close">x</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_list_book">THÔNG TIN SÁCH</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="go">GO</string>
+    <string name="new_user_signup">NEW USER? SIGNUP</string>
+    <string name="sua_book">Sửa</string>
+    <string name="dang_xu_ly">Đang xử lý...</string>
+    <string name="ten_sach">An American Marriage</string>
 
 
 </resources>
