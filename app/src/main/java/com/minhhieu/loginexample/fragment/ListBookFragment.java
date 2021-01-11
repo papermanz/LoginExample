@@ -11,7 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
-
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
@@ -50,6 +51,7 @@ import com.minhhieu.loginexample.view.activity.EditBookActivity;
 import com.minhhieu.loginexample.view.activity.LoginActivity;
 
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -287,8 +289,21 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
         final String anh = book.getAnh();
 
         PopupMenu popup = new PopupMenu(getActivity(),v, Gravity.END,0,R.style.PopupMenuMoreCentralized);
-        popup.inflate(R.menu.menu_sua_xoa);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_sua_xoa, popup.getMenu());
 
+
+        Object menuHelper;
+        Class[] argTypes;
+        try {
+            Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
+            fMenuHelper.setAccessible(true);
+            menuHelper = fMenuHelper.get(popup);
+            argTypes = new Class[]{boolean.class};
+            menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
+        } catch (Exception e) {
+            Log.e("error Show Icon", "onLongClick: "+e );
+        }
         popup.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.edit_book:
