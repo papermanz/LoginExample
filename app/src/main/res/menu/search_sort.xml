@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="search"
+        android:id="@+id/search_option"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+
+
+    <item
+        android:title="Sort by"
+        android:id="@+id/sort_options"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:title="name"
+                android:id="@+id/by_name"
+                app:showAsAction="never"/>
+            <item
+                android:title="date"
+                android:id="@+id/by_date"
+                app:showAsAction="never"/>
+            <item
+                android:title="author"
+                android:id="@+id/by_author"
+                app:showAsAction="never"/>
+            <item
+                android:title="page"
+                android:id="@+id/by_page"
+                app:showAsAction="never"/>
+
+        </menu>
+
+
+    </item>
+
+    <item
+        android:title="logout"
+        android:id="@+id/item_logout"
+        app:showAsAction="never"
+        />
+
+</menu>
