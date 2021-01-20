@@ -54,7 +54,8 @@
         app:layout_constraintTop_toBottomOf="@+id/txtTenSach" />
 
     <TextView
-        android:transitionName="Theloai"
+
+        android:transitionName="TheloaiTN"
         android:id="@+id/txtTheloai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,13 +105,14 @@
         android:transitionName="bookpagesTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        android:text="trang"
+        android:text="@string/trang"
         app:layout_constraintStart_toEndOf="@+id/txt_soTrang"
         app:layout_constraintTop_toBottomOf="@+id/txtTheloai" />
 
     <ImageView
+
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -8,11 +8,13 @@ import android.content.Intent;
 
 import android.graphics.Bitmap;
 
+
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
 
 
@@ -29,15 +31,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.minhhieu.loginexample.R;
+import com.minhhieu.loginexample.animator.TranslateAnimationUtil;
 import com.minhhieu.loginexample.data.DatabaseBook;
 import com.minhhieu.loginexample.model.Book;
 import com.minhhieu.loginexample.utils.asynctask.CheckBookTask;
 import com.minhhieu.loginexample.utils.asynctask.SetBookTask;
-import com.minhhieu.loginexample.view.activity.MainActivity;
+import com.minhhieu.loginexample.view.activity.HomeActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,6 +66,8 @@ public class AddBookFragment extends Fragment implements View.OnClickListener {
     private View layout;
     DatabaseBook databaseBook;
     private Book book;
+    ScrollView scrollView;
+    BottomNavigationView bottomNavigationView;
 
     int REQUEST_CODE_FOLDER = 123;
     String imagePath;
@@ -128,13 +135,10 @@ public class AddBookFragment extends Fragment implements View.OnClickListener {
         final int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(Objects.requireNonNull(getActivity()), new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int mYear, int mMonth, int mDay) {
-                calendar.set(mYear,mMonth,mDay);
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                edtNXB.setText(simpleDateFormat.format(calendar.getTime()));
-            }
+        DatePickerDialog datePickerDialog = new DatePickerDialog(Objects.requireNonNull(getActivity()), (view, mYear, mMonth, mDay) -> {
+            calendar.set(mYear,mMonth,mDay);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            edtNXB.setText(simpleDateFormat.format(calendar.getTime()));
         }, year, month, day);
         datePickerDialog.show();
     }
@@ -153,12 +157,7 @@ public class AddBookFragment extends Fragment implements View.OnClickListener {
     private void addBook(){
         inputBook();
         SetBookTask setBookTask = new SetBookTask(getActivity(),book);
-        setBookTask.setGetBookListener(new SetBookTask.GetBookListener() {
-            @Override
-            public void onSuccess(String s) {
-                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-            }
-        });
+        setBookTask.setGetBookListener(s -> Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show());
         setBookTask.execute();
         }
 
@@ -218,6 +217,8 @@ public class AddBookFragment extends Fragment implements View.OnClickListener {
 
         btnAddBook = layout.findViewById(R.id.btn_add_book);
         imgBook = layout.findViewById(R.id.imgBook);
+        scrollView = layout.findViewById(R.id.scroll_view_addbook);
+        bottomNavigationView = getActivity().findViewById(R.id.navigation_bottom);
 
     }
 
@@ -250,6 +251,8 @@ public class AddBookFragment extends Fragment implements View.OnClickListener {
         setSpinner();
 
         edtNXB.addTextChangedListener(mDateEntryWatcher);
+        scrollView.setOnTouchListener(new TranslateAnimationUtil(getActivity(),bottomNavigationView));
+
 
 
 
@@ -291,24 +294,22 @@ public class AddBookFragment extends Fragment implements View.OnClickListener {
             inputBook();
 
             CheckBookTask task = new CheckBookTask(getActivity(), tenSach);
-            task.setGetBookListener(new CheckBookTask.GetBookListener() {
-                @Override
-                public void onSuccess(Book book) {
-                    if (book.getTenSach() != null) {
-                        Toast.makeText(getActivity(), "Sách đã tồn tại!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        addBook();
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
+            task.setGetBookListener(book -> {
+                if (book.getTenSach() != null) {
+                    Toast.makeText(getActivity(), "Sách đã tồn tại!", Toast.LENGTH_SHORT).show();
+                } else {
+                    addBook();
+                    Intent intent = new Intent(getActivity(), HomeActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
 
-                    }
                 }
             });
             task.execute();
         }
 
     }
+
 
 
     private void setbtnNXB(){
@@ -387,6 +388,7 @@ public class AddBookFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
 
 
 

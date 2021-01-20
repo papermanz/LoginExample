@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/homeActivity"
+        android:title="home"
+        android:icon="@drawable/home"
+
+        app:showAsAction="ifRoom"
+        />
+
+
+
+    <item
+        android:id="@+id/listBookActivity"
+        android:title="@string/list_book"
+        android:icon="@drawable/listbook"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/addbookActivity"
+        android:title="home"
+        android:icon="@drawable/add"
+        app:showAsAction="ifRoom"
+        />
+
+
+    <item
+        android:id="@+id/settings"
+        android:title="settings"
+        android:icon="@drawable/settings"
+        app:showAsAction="ifRoom"
+        />
+
+
+
+    <item
+        android:id="@+id/personalActivity"
+        android:title="user"
+        android:icon="@drawable/user"
+        app:showAsAction="ifRoom"/>
+
+</menu>

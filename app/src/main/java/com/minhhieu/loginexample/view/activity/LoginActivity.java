@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         progressDialog.show();
                         Handler handler = new Handler();
                         handler.postDelayed(() -> {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             Log.d("LOGIN", "SUCCESS ");
                             startActivity(intent);
                             progressDialog.dismiss();

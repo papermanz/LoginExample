@@ -236,7 +236,7 @@ public class EditBookActivity extends AppCompatActivity implements View.OnClickL
             try {
                 databaseBook.updateBook(book,id);
                 Toast.makeText(this, "Sửa sách thành công!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
             }catch (NullPointerException ex){
                 Log.e("lỗi", "onClick: " + ex);

@@ -109,7 +109,7 @@ public class DatabaseBook extends SQLiteOpenHelper {
 
     public ArrayList<Book> getAllBook() {
         ArrayList<Book> list = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME;
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME +" LIMIT 10,8";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {

@@ -24,7 +24,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     DatabaseBook databaseBook;
     private static ItemClickListener itemClickListener;
 
-
+    public BookAdapter(Context context, ArrayList<Book> bookList, DatabaseBook databaseBook) {
+        this.context = context;
+        this.bookList = bookList;
+        this.databaseBook = databaseBook;
+    }
 
     public BookAdapter(Context context, ArrayList<Book> bookList, DatabaseBook databaseBook, ItemClickListener itemClickListener) {
         this.context = context;

@@ -8,6 +8,7 @@
     >
 
     <ScrollView
+        android:id="@+id/scroll_view_addbook"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         >
@@ -59,8 +60,9 @@
                             android:id="@+id/edtTacGia"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:backgroundTint="@color/white"
                             android:hint="@string/tac_gia"
+                            android:background="#f4f4f2"
+
                             android:inputType="textCapWords" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,9 +79,10 @@
 
                             android:hint="@string/book_name"
                             android:inputType="text"
-                            android:backgroundTint="@color/color_white"
+
                             android:textSize="15sp"
                             android:textStyle="bold"
+                            android:background="#f4f4f2"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,7 +100,7 @@
                             android:hint="@string/nha_xuat_ban"
                             android:textSize="15sp"
                             android:inputType="text"
-                            android:backgroundTint="@color/color_white"
+                            android:background="#f4f4f2"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 

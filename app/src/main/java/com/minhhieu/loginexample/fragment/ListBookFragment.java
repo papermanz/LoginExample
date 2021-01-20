@@ -1,6 +1,7 @@
 package com.minhhieu.loginexample.fragment;
 
 import android.annotation.SuppressLint;
+
 import android.content.Intent;
 
 import android.os.Build;
@@ -11,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
@@ -28,27 +27,28 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 
-import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.minhhieu.loginexample.R;
 import com.minhhieu.loginexample.adapter.BookAdapter;
+import com.minhhieu.loginexample.animator.TranslateAnimationUtil;
 import com.minhhieu.loginexample.interfaces.ItemClickListener;
 import com.minhhieu.loginexample.data.DatabaseBook;
 import com.minhhieu.loginexample.model.Book;
 import com.minhhieu.loginexample.view.activity.DetailBookActivity;
 import com.minhhieu.loginexample.view.activity.EditBookActivity;
-import com.minhhieu.loginexample.view.activity.LoginActivity;
+
 
 
 import java.lang.reflect.Field;
@@ -64,12 +64,22 @@ import java.util.Date;
 public class ListBookFragment extends Fragment implements SearchView.OnQueryTextListener, ItemClickListener {
     DatabaseBook databaseBook;
     RecyclerView rcBook;
+    BottomNavigationView bottomNavigationView;
+    SearchView searchView;
+    Button btnSort;
+
+
+
 
     BookAdapter bookAdapter;
-
     private boolean isLoading = false;
 
+
+
+
     ProgressBar progressBar;
+
+
 
     ArrayList<Book> arrayBook= new ArrayList<>();
     private View layout;
@@ -80,9 +90,15 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
         progressBar = layout.findViewById(R.id.progress_bar1);
 
 
+        bottomNavigationView = getActivity().findViewById(R.id.navigation_bottom);
+
+        searchView = layout.findViewById(R.id.search_book);
+        btnSort = layout.findViewById(R.id.btn_sort);
+
 
 
     }
+
 
 
     @Override
@@ -92,6 +108,10 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
         setHasOptionsMenu(true);
 
 
+
+
+
+
     }
 
     @Override
@@ -99,27 +119,79 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
                              Bundle savedInstanceState) {
         layout=inflater.inflate(R.layout.fragment_list_book, container, false);
         initLayout();
+        rcBook.setOnTouchListener(new TranslateAnimationUtil(getActivity(),bottomNavigationView));
+        initListener();
         setLoading();
         getBookList();
+        searchView.setOnQueryTextListener(this);
 
         return layout;
     }
 
+    public void initListener() {
+        btnSort.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(getActivity(), btnSort);
+            popup.getMenuInflater().inflate(R.menu.search_sort, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId())
+                {
+                    case R.id.by_name:
+                        sortListByName(arrayBook);
+                        bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook);
+                        rcBook.setAdapter(bookAdapter);
+                        return true;
+
+                    case R.id.by_date:
+                        sortListByDate(arrayBook);
+                        bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook);
+                        rcBook.setAdapter(bookAdapter);
+                        return true;
+
+                    case R.id.by_author:
+                        sortListByAuthor(arrayBook);
+                        bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook);
+                        rcBook.setAdapter(bookAdapter);
+                        return true;
+
+                    case R.id.by_page:
+                        Collections.sort(arrayBook);
+                        bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook);
+                        rcBook.setAdapter(bookAdapter);
+                        return true;
+                    default:
+                        return false;
+
+
+                }
+
+
+            });
+            popup.show();
+
+        });
+    }
+
+
     private void setLoading(){
         rcBook.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
                 if(!isLoading){
                     if(layoutManager != null && layoutManager.findLastCompletelyVisibleItemPosition() == arrayBook.size() - 1)
                     {
                         loadMoreBookList();
                         isLoading = true;
                         progressBar.setVisibility(View.VISIBLE);
+
                     }
                 }
             }
+
         });
     }
 
@@ -131,6 +203,7 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
         rcBook.setAdapter(bookAdapter);
 
     }
+
 
 
 
@@ -176,17 +249,18 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
 
 
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-
-        inflater.inflate(R.menu.search_sort, menu);
-        final MenuItem searchItem = menu.findItem(R.id.search_option);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(this);
-        super.onCreateOptionsMenu(menu, inflater);
-
-
-    }
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//
+//        inflater.inflate(R.menu.search_sort, menu);
+//        final MenuItem searchItem = menu.findItem(R.id.search_option);
+//        final SearchView searchView = (SearchView) searchItem.getActionView();
+//        searchView.setOnQueryTextListener(this);
+//
+//        super.onCreateOptionsMenu(menu, inflater);
+//
+//
+//    }
 
     /****************
      *Sort by author*
@@ -211,17 +285,7 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
         final String noiDung = book.getNoiDung();
         final String anh = book.getAnh();
 
-//        putDetailBook( +position,
-//                ""+id,
-//                ""+tenSach,
-//                ""+tacGia,
-//                ""+nhaSX,
-//                ""+theLoai,
-//                ""+ngayXB,
-//                ""+trang,
-//                ""+gia,
-//                ""+noiDung,
-//                ""+anh);
+
 
         Intent intent = new Intent(getActivity(), DetailBookActivity.class);
 
@@ -239,12 +303,16 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
         Pair<View,String> p2 = Pair.create((View)imgBook,"bookTN");
         Pair<View,String> p3 = Pair.create((View)title,"booktitleTN");
         Pair<View,String> p4 = Pair.create((View)authorName,"authorTN");
-        Pair<View,String> p5 = Pair.create((View)pages,"bookpagesTN");
+        Pair<View,String> p5 = Pair.create((View)authorName,"TheloaiTN");
+        Pair<View,String> p6 = Pair.create((View)pages,"bookpagesTN");
+
+
+
 
 
 
         ActivityOptionsCompat optionsCompat =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),p1,p2,p3,p4,p5);
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),p1,p2,p3,p4,p5,p6);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             getActivity().startActivity(intent,optionsCompat.toBundle());
@@ -254,23 +322,7 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
 
     }
 
-//    private void putDetailBook(int position, final String id, final String tenSach, final String tacGia, final String nhaSX, final String theLoai, final String ngayXB, final String trang, final String gia, final String noiDung, final String anh) {
-//        Intent intent = new Intent(getActivity(), DetailBookActivity.class);
-//        intent.putExtra("ID",id);
-//        intent.putExtra("TENSACH",tenSach);
-//        intent.putExtra("TACGIA",tacGia);
-//        intent.putExtra("NHASX",nhaSX);
-//        intent.putExtra("THELOAI",theLoai);
-//        intent.putExtra("NGAYXB",ngayXB);
-//        intent.putExtra("TRANG",trang);
-//        intent.putExtra("GIA",gia);
-//        intent.putExtra("NOIDUNG",noiDung);
-//        intent.putExtra("ANH",anh);
-//        intent.putExtra("editMode",false);
-//
-//
-//        getActivity().startActivity(intent);
-//    }
+
 
 
     @SuppressLint("RestrictedApi")
@@ -330,9 +382,10 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
                             .setPositiveButton("Có", (dialogInterface, i) -> {
                                 try{
                                     databaseBook.deleteBook(arrayBook.get(position).getId());
-                                    Toast.makeText(getActivity(), "Xoá sách "+arrayBook.get(position).getTenSach()+" thành công !", Toast.LENGTH_SHORT).show();
                                     arrayBook.remove(position);
+                                    Toast.makeText(getActivity(), "Xoá sách "+arrayBook.get(position).getTenSach()+" thành công !", Toast.LENGTH_SHORT).show();
                                     bookAdapter.notifyDataSetChanged();
+
                                 }catch (NullPointerException ex){
                                     Log.e("lỗi", "onClick: " + ex);
                                 }
@@ -473,58 +526,56 @@ public class ListBookFragment extends Fragment implements SearchView.OnQueryText
 
 
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//
+//        switch (item.getItemId())
+//        {
+//            case R.id.by_name:
+//                sortListByName(arrayBook);
+//                bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook,this);
+//                rcBook.setAdapter(bookAdapter);
+//                break;
+//
+//            case R.id.by_date:
+//                sortListByDate(arrayBook);
+//                bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook,this);
+//                rcBook.setAdapter(bookAdapter);
+//                break;
+//
+//            case R.id.by_author:
+//                sortListByAuthor(arrayBook);
+//                bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook,this);
+//                rcBook.setAdapter(bookAdapter);
+//                break;
+//
+//            case R.id.by_page:
+//                Collections.sort(arrayBook);
+//                bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook,this);
+//                rcBook.setAdapter(bookAdapter);
+//                break;
+//
+//
+//
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
-        switch (item.getItemId())
-        {
-            case R.id.by_name:
-                sortListByName(arrayBook);
-                bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook,this);
-                rcBook.setAdapter(bookAdapter);
-                break;
-
-            case R.id.by_date:
-                sortListByDate(arrayBook);
-                bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook,this);
-                rcBook.setAdapter(bookAdapter);
-                break;
-
-            case R.id.by_author:
-                sortListByAuthor(arrayBook);
-                bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook,this);
-                rcBook.setAdapter(bookAdapter);
-                break;
-
-            case R.id.by_page:
-                Collections.sort(arrayBook);
-                bookAdapter = new BookAdapter(getActivity(),arrayBook,databaseBook,this);
-                rcBook.setAdapter(bookAdapter);
-                break;
-
-            case R.id.item_logout:
-                setLogOut();
-                break;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setLogOut(){
-        new MaterialAlertDialogBuilder(getActivity())
-                .setTitle("")
-                .setMessage("Bạn có muốn thoát tài khoản không?")
-                .setPositiveButton("Có", (dialogInterface, i) -> {
-                    Intent intent = new Intent(getActivity(),LoginActivity.class);
-                    startActivity(intent);
-                })
-                .setNegativeButton("Không", (dialogInterface, i) -> {
-
-                })
-                .show();
-
-    }
+//    private void setLogOut(){
+//        new MaterialAlertDialogBuilder(getActivity())
+//                .setTitle("")
+//                .setMessage("Bạn có muốn thoát tài khoản không?")
+//                .setPositiveButton("Có", (dialogInterface, i) -> {
+//                    Intent intent = new Intent(getActivity(),LoginActivity.class);
+//                    startActivity(intent);
+//                })
+//                .setNegativeButton("Không", (dialogInterface, i) -> {
+//
+//                })
+//                .show();
+//
+//    }
 
     private void editDialog(int position, final String id, final String tenSach, final String tacGia, final String nhaSX, final String theLoai, final String ngayXB, final String trang, final String gia, final String noiDung, final String anh) {
         new MaterialAlertDialogBuilder(getActivity())
